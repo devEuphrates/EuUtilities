@@ -1,0 +1,16 @@
+{
+    "name": "euphrates.utilities.editor",
+    "rootNamespace": "Euphrates.Editor",
+    "references": [
+        "GUID:6d65389757559a64897d40a459f71093"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

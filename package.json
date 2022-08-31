@@ -1,0 +1,22 @@
+{
+  "name": "com.euphrates.utilities",
+  "version": "1.0.0",
+  "displayName": "EuUtilities",
+  "description": "Basic utilities like a timer and a tween library.",
+  "unity": "2021.3",
+  "unityRelease": "8f1",
+  "documentationUrl": "http://www.firatyildirim.com",
+  "changelogUrl": "http://www.firatyildirim.com",
+  "licensesUrl": "http://www.firatyildirim.com",
+  "keywords": [
+    "timer",
+    "tween",
+    "editor"
+  ],
+  "author": {
+    "name": "Fırat Yıldırım",
+    "email": "firatyildirim@resingames.com",
+    "url": "http://www.firatyildirim.com"
+  },
+  "type": "tool"
+}
