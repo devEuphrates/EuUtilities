@@ -1,6 +1,6 @@
 {
   "name": "com.euphrates.utilities",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "EuUtilities",
   "description": "Basic utilities like a timer and a tween library.",
   "unity": "2021.3",

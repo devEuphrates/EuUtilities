@@ -68,5 +68,7 @@ namespace Euphrates
 
             return default(T);
         }
+
+        public static Vector3 TopDownPlane(this Vector3 vector) => new Vector3(vector.x, 0f, vector.z);
     }
 }
