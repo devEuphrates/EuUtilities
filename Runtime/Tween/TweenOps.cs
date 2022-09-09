@@ -18,10 +18,32 @@ namespace Euphrates
             float step = (time - data.Start) / data.Duration;
             float eased = ease(step);
 
-            return data.From + data.To * eased;
+            float diff = data.To - data.From;
+
+            return data.From + diff * eased;
         }
 
-        public static Color ColorOperation(TweenData<Color> data, float time)
+        public static double DoubleOperation(TweenData<double> data, float time, Func<float, float> ease)
+        {
+            float step = (time - data.Start) / data.Duration;
+            float eased = ease(step);
+
+            double diff = data.To - data.From;
+
+            return data.From + diff * (double)eased;
+        }
+
+        public static int IntegerOperation(TweenData<int> data, float time, Func<float, float> ease)
+        {
+            float step = (time - data.Start) / data.Duration;
+            float eased = ease(step);
+
+            int diff = data.To - data.From;
+
+            return data.From + Mathf.CeilToInt(diff * eased);
+        }
+
+        public static Color ColorOperation(TweenData<Color> data, float time, Func<float, float> ease)
         {
             float step = (time - data.Start) / data.Duration;
             return Color.Lerp(data.From, data.To, step);
@@ -45,6 +67,19 @@ namespace Euphrates
             Vector2 dir = data.To - data.From;
 
             return data.From + dir * eased;
+        }
+
+        public static Quaternion QuaternionOperation(TweenData<Quaternion> data, float time, Func<float, float> ease)
+        {
+            float step = (time - data.Start) / data.Duration;
+            float eased = ease(step);
+
+            Quaternion inv = Quaternion.Inverse(data.From);
+            Quaternion diff = inv * data.To;
+
+            Quaternion scaled = new Quaternion(diff.x * eased, diff.y * eased, diff.z * eased, diff.w * eased);
+
+            return Quaternion.Lerp(data.From, data.To, eased);
         }
         #endregion
 
