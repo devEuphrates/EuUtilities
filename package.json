@@ -1,8 +1,8 @@
 {
   "name": "com.euphrates.utilities",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "displayName": "EuUtilities",
-  "description": "Basic utilities like a timer and a tween library.",
+  "description": "This package includes:\n* Singleton base class.\n* Tween library.\n* Game timer.\n* ScriptableObject Architecture components.\n* Object Pooler.",
   "unity": "2021.3",
   "unityRelease": "8f1",
   "documentationUrl": "http://www.firatyildirim.com",

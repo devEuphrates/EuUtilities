@@ -2,13 +2,33 @@ using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    public static T Instance;
+    static T _instance;
+    public static T Instance 
+    {
+        get 
+        {
+            if (_instance != null)
+                return _instance;
+
+            GameObject go = new GameObject(typeof(T).Name);
+
+            T comp = go.AddComponent<T>();
+            _instance = comp;
+
+            return _instance;
+        }
+    }
 
     protected virtual void Awake()
     {
-        if (Instance != null)
-            Destroy(this);
+        if (_instance != null)
+        {
+            if (_instance == this)
+                return;
 
-        Instance = this as T;
+            Destroy(this);
+        }
+
+        _instance = this as T;
     }
 }
