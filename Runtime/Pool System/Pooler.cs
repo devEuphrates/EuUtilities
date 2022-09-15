@@ -8,8 +8,7 @@ public class Pooler : Singleton<Pooler>
     Dictionary<string, ObjectPool<GameObject>> _pools = new Dictionary<string, ObjectPool<GameObject>>();
 
     [Space, Header("Pool Sizes")]
-    [SerializeField] int _initialCount = 100;
-    [SerializeField] int _maxCount = 1000;
+    [SerializeField] bool _collectionCheck = false;
 
     protected override void Awake()
     {
@@ -18,8 +17,11 @@ public class Pooler : Singleton<Pooler>
         foreach (var dt in _pooledObjects)
         {
             _pools[dt.Name] = new ObjectPool<GameObject>(() => CreatePoolObject(dt.Name, dt.Prefab), OnObjectTaken, OnObjectReturned, OnDestroyObject
-                , true, _initialCount, _maxCount);
+                , _collectionCheck, dt.MinCapacity, dt.MaxCapacity);
+
+            print(_pools[dt.Name].CountAll);
         }
+
     }
 
     GameObject CreatePoolObject(string name, GameObject prefab)
@@ -60,6 +62,8 @@ public class Pooler : Singleton<Pooler>
     {
         public string Name;
         public GameObject Prefab;
+        public int MinCapacity;
+        public int MaxCapacity;
     }
 
     public static GameObject PoolSpawn(string poolName, Transform parent, Vector3 position, Quaternion rotation)
@@ -79,9 +83,24 @@ public class Pooler : Singleton<Pooler>
 
     public static GameObject PoolSpawn(string poolName, Transform parent) => PoolSpawn(poolName, parent, Vector3.zero, Quaternion.identity);
 
+    public static GameObject PoolSpawn(string poolName, Transform parent, Vector3 position) => PoolSpawn(poolName, parent, position, Quaternion.identity);
+
+    public static GameObject PoolSpawn(string poolName, Transform parent, Quaternion rotation) => PoolSpawn(poolName, parent, Vector3.zero, rotation);
+
     public static GameObject PoolSpawn(string poolName, Vector3 position, Quaternion rotation) => PoolSpawn(poolName, null, position, rotation);
 
     public static GameObject PoolSpawn(string poolName, Vector3 position) => PoolSpawn(poolName, null, position, Quaternion.identity);
 
     public static GameObject PoolSpawn(string poolName, Quaternion rotation) => PoolSpawn(poolName, null, Vector3.zero, rotation);
+
+    public static void Release(string poolName, GameObject go)
+    {
+        if (!Instance._pools.TryGetValue(poolName, out var pool))
+        {
+            Destroy(go);
+            return;
+        }
+
+        pool.Release(go);
+    }
 }
