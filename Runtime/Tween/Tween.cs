@@ -11,44 +11,8 @@ namespace Euphrates
         static List<TweenData> _tweens = new List<TweenData>();
         static bool _working;
 
-        #region Extensions
-        public static void DoPosition(this Transform transform, Vector3 position, float duration, Ease easeFunction = Ease.Lerp, Action<Vector3> onStep = null, Action onFinish = null)
-        {
-            Vector3 start = transform.position;
-            Vector3 end = position;
-
-            void Step(Vector3 val)
-            {
-                transform.position = val;
-                onStep?.Invoke(val);
-            }
-
-            DoTween(start, end, duration, easeFunction, Step, onFinish);
-        }
-
-        public static void DoRotation(this Transform transform, Quaternion rotation, float duration, Ease easeFunction = Ease.Lerp, Action<Quaternion> onStep = null, Action onFinish = null)
-        {
-            Quaternion start = transform.rotation;
-            Quaternion end = rotation;
-
-            void Step(Quaternion val)
-            {
-                transform.rotation = val;
-                onStep?.Invoke(val);
-            }
-
-            DoTween(start, end, duration, easeFunction, Step, onFinish);
-        }
-
-        public static void DoMove(this Transform transform, Vector3 move, float duration, Ease easeFunction = Ease.Lerp)
-            => DoPosition(transform, transform.position + move, duration, easeFunction);
-
-        public static void DoRotate(this Transform transform, Quaternion rotate, float duration, Ease easeFunction = Ease.Lerp)
-            => DoRotation(transform, transform.rotation * rotate, duration, easeFunction);
-        #endregion
-
-        #region Do
-        static int DoTween<T>(string functionName, T val, T endVal, float duration, Ease easeFunction = Ease.Lerp, Action<T> onStep = null, Action onFinish = null)
+        #region Create
+        static TweenData CreateTween<T>(string functionName, T val, T endVal, float duration, Ease easeFunction = Ease.Lerp, Action<T> onStep = null, Action onFinish = null)
         {
             try
             {
@@ -66,8 +30,7 @@ namespace Euphrates
                     onFinish,
                     Operation);
 
-                AddTween(data);
-                return data.ID;
+                return data;
             }
             catch (Exception ex)
             {
@@ -75,28 +38,65 @@ namespace Euphrates
             }
         }
 
-        static int DoTween<T>(T val, T endVal, float duration, Ease easeFunction = Ease.Lerp, Action<T> onStep = null, Action onFinish = null)
+        public static TweenData CreateTween(float val, float endVal, float duration, Ease easeFunction = Ease.Lerp, Action<float> onStep = null, Action onFinish = null)
+            => CreateTween("FloatOperation", val, endVal, duration, easeFunction, onStep, onFinish);
+
+        public static TweenData CreateTween(double val, double endVal, float duration, Ease easeFunction = Ease.Lerp, Action<double> onStep = null, Action onFinish = null)
+            => CreateTween("DoubleOperation", val, endVal, duration, easeFunction, onStep, onFinish);
+
+        public static TweenData CreateTween(int val, int endVal, float duration, Ease easeFunction = Ease.Lerp, Action<int> onStep = null, Action onFinish = null)
+            => CreateTween("IntegerOperation", val, endVal, duration, easeFunction, onStep, onFinish);
+
+        public static TweenData CreateTween(Color val, Color endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Color> onStep = null, Action onFinish = null)
+            => CreateTween("ColorOperation", val, endVal, duration, easeFunction, onStep, onFinish);
+
+        public static TweenData CreateTween(Vector3 val, Vector3 endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Vector3> onStep = null, Action onFinish = null)
+            => CreateTween("Vector3Operation", val, endVal, duration, easeFunction, onStep, onFinish);
+
+        public static TweenData CreateTween(Vector2 val, Vector2 endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Vector2> onStep = null, Action onFinish = null)
+            => CreateTween("Vector2Operation", val, endVal, duration, easeFunction, onStep, onFinish);
+
+        public static TweenData CreateTween(Quaternion val, Quaternion endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Quaternion> onStep = null, Action onFinish = null)
+            => CreateTween("QuaternionOperation", val, endVal, duration, easeFunction, onStep, onFinish);
+        #endregion
+
+        #region Do
+        static TweenData DoTween<T>(string functionName, T val, T endVal, float duration, Ease easeFunction = Ease.Lerp, Action<T> onStep = null, Action onFinish = null)
+        {
+            try
+            {
+                TweenData data = CreateTween(functionName, val, endVal, duration, easeFunction, onStep, onFinish);
+                StartTween(data);
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        static TweenData DoTween<T>(T val, T endVal, float duration, Ease easeFunction = Ease.Lerp, Action<T> onStep = null, Action onFinish = null)
         => DoTween<T>($"{typeof(T).Name}Operation", val, endVal, duration, easeFunction, onStep, onFinish);
 
-        public static int DoTween(float val, float endVal, float duration, Ease easeFunction = Ease.Lerp, Action<float> onStep = null, Action onFinish = null)
+        public static TweenData DoTween(float val, float endVal, float duration, Ease easeFunction = Ease.Lerp, Action<float> onStep = null, Action onFinish = null)
             => DoTween("FloatOperation", val, endVal, duration, easeFunction, onStep, onFinish);
 
-        public static int DoTween(double val, double endVal, float duration, Ease easeFunction = Ease.Lerp, Action<double> onStep = null, Action onFinish = null)
+        public static TweenData DoTween(double val, double endVal, float duration, Ease easeFunction = Ease.Lerp, Action<double> onStep = null, Action onFinish = null)
             => DoTween("DoubleOperation", val, endVal, duration, easeFunction, onStep, onFinish);
 
-        public static int DoTween(int val, int endVal, float duration, Ease easeFunction = Ease.Lerp, Action<int> onStep = null, Action onFinish = null)
+        public static TweenData DoTween(int val, int endVal, float duration, Ease easeFunction = Ease.Lerp, Action<int> onStep = null, Action onFinish = null)
             => DoTween("IntegerOperation", val, endVal, duration, easeFunction, onStep, onFinish);
 
-        public static int DoTween(Color val, Color endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Color> onStep = null, Action onFinish = null)
+        public static TweenData DoTween(Color val, Color endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Color> onStep = null, Action onFinish = null)
             => DoTween("ColorOperation", val, endVal, duration, easeFunction, onStep, onFinish);
 
-        public static int DoTween(Vector3 val, Vector3 endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Vector3> onStep = null, Action onFinish = null)
+        public static TweenData DoTween(Vector3 val, Vector3 endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Vector3> onStep = null, Action onFinish = null)
             => DoTween("Vector3Operation", val, endVal, duration, easeFunction, onStep, onFinish);
 
-        public static int DoTween(Vector2 val, Vector2 endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Vector2> onStep = null, Action onFinish = null)
+        public static TweenData DoTween(Vector2 val, Vector2 endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Vector2> onStep = null, Action onFinish = null)
             => DoTween("Vector2Operation", val, endVal, duration, easeFunction, onStep, onFinish);
 
-        public static int DoTween(Quaternion val, Quaternion endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Quaternion> onStep = null, Action onFinish = null)
+        public static TweenData DoTween(Quaternion val, Quaternion endVal, float duration, Ease easeFunction = Ease.Lerp, Action<Quaternion> onStep = null, Action onFinish = null)
             => DoTween("QuaternionOperation", val, endVal, duration, easeFunction, onStep, onFinish);
         #endregion
 
@@ -114,7 +114,7 @@ namespace Euphrates
             return false;
         }
 
-        static void AddTween(TweenData data)
+        public static void StartTween(TweenData data)
         {
             _tweens.Add(data);
 
@@ -167,6 +167,107 @@ namespace Euphrates
 
             _working = false;
         }
+
+        #region Extensions
+        public static void DoPosition(this Transform transform, Vector3 position, float duration, Ease easeFunction = Ease.Lerp, Action<Vector3> onStep = null, Action onFinish = null)
+        {
+            Vector3 start = transform.position;
+            Vector3 end = position;
+
+            void Step(Vector3 val)
+            {
+                transform.position = val;
+                onStep?.Invoke(val);
+            }
+
+            DoTween(start, end, duration, easeFunction, Step, onFinish);
+        }
+
+        public static void DoMove(this Transform transform, Vector3 move, float duration, Ease easeFunction = Ease.Lerp)
+            => DoPosition(transform, transform.position + move, duration, easeFunction);
+
+        public static void DoRotation(this Transform transform, Quaternion rotation, float duration, Ease easeFunction = Ease.Lerp, Action<Quaternion> onStep = null, Action onFinish = null)
+        {
+            Quaternion start = transform.rotation;
+            Quaternion end = rotation;
+
+            void Step(Quaternion val)
+            {
+                transform.rotation = val;
+                onStep?.Invoke(val);
+            }
+
+            DoTween(start, end, duration, easeFunction, Step, onFinish);
+        }
+
+        public static void DoRotate(this Transform transform, Quaternion rotate, float duration, Ease easeFunction = Ease.Lerp)
+           => DoRotation(transform, transform.rotation * rotate, duration, easeFunction);
+
+        public static void DoScale(this Transform transform, Vector3 scale, float duration, Ease easeFunction = Ease.Lerp, Action<Vector3> onStep = null, Action onFinish = null)
+        {
+            Vector3 start = transform.localScale;
+            Vector3 end = scale;
+
+            void Step(Vector3 val)
+            {
+                transform.localScale = val;
+                onStep?.Invoke(val);
+            }
+
+            DoTween(start, end, duration, easeFunction, Step, onFinish);
+        }
+
+        public static void DoAlpha(this CanvasGroup canvasGroup, float alpha, float duration, Ease easeFunction = Ease.Lerp, Action<float> onStep = null, Action onFinish = null)
+        {
+            float start = canvasGroup.alpha;
+            float end = alpha;
+
+            void Step(float val)
+            {
+                canvasGroup.alpha = val;
+                onStep?.Invoke(val);
+            }
+
+            DoTween(start, end, duration, easeFunction, Step, onFinish);
+        }
+
+        public static void DoColor(this MeshRenderer renderer, Color color, float duration, Ease easeFunction = Ease.Lerp, Action<Color> onStep = null, Action onFinish = null)
+        {
+            Color start = renderer.material.color;
+            Color end = color;
+
+            void Step(Color val)
+            {
+                renderer.material.color = val;
+                onStep?.Invoke(val);
+            }
+
+            DoTween(start, end, duration, easeFunction, Step, onFinish);
+        }
+
+        public static void DoColor(this MeshRenderer renderer, string colorName, Color color, float duration, Ease easeFunction = Ease.Lerp, Action<Color> onStep = null, Action onFinish = null)
+        {
+            Color start = renderer.material.GetColor(colorName);
+            Color end = color;
+
+            void Step(Color val)
+            {
+                renderer.material.SetColor(colorName, val);
+                onStep?.Invoke(val);
+            }
+
+            DoTween(start, end, duration, easeFunction, Step, onFinish);
+        }
+        #endregion
+
+        #region Animations
+
+        public static void DoJump()
+        {
+
+        }
+
+        #endregion
     }
 
     public interface TweenData
@@ -179,6 +280,12 @@ namespace Euphrates
 
         public void InvokeStep(float t);
         public void InvokeFinish();
+
+        public void Stop();
+        public void Then(TweenData tween);
+
+        public void AddFinishListener(Action listener);
+        public void RemoveFinishListener(Action listener);
     }
 
     public struct TweenData<T> : TweenData
@@ -209,6 +316,14 @@ namespace Euphrates
 
         public Func<TweenData<T>, float, T> Operation;
 
+        public void Stop() => Tween.StopTween(ID);
+
+        public void Then(TweenData tween) => OnFinish += () => Tween.StartTween(tween);
+
+        public void AddFinishListener(Action listener) => OnFinish += listener;
+
+        public void RemoveFinishListener(Action listener) => OnFinish -= listener;
+
         public TweenData(int id,
                          T from,
                          T to,
@@ -226,6 +341,90 @@ namespace Euphrates
             OnStep = step;
             OnFinish = finish;
             Operation = operation;
+        }
+    }
+
+    public class TweenQueue
+    {
+        public event Action OnFinish;
+        public event Action<TweenData> OnFinishStep;
+
+        List<TweenData> _tweens;
+        int _currentIndex;
+
+        bool _working = false;
+        public bool Working => _working;
+
+        public TweenQueue(TweenData first, Action onFinish, Action<TweenData> onFinishStep)
+        {
+            OnFinish = onFinish;
+            OnFinishStep = onFinishStep;
+
+            _tweens = new List<TweenData>();
+            _tweens.Add(first);
+
+            _currentIndex = 0;
+        }
+
+        public TweenQueue(TweenData first, Action onFinish)
+        {
+            OnFinish = onFinish;
+            OnFinishStep = null;
+
+            _tweens = new List<TweenData>();
+            _tweens.Add(first);
+
+            _currentIndex = 0;
+        }
+
+        public TweenQueue(TweenData first)
+        {
+            OnFinish = null;
+            OnFinishStep = null;
+
+            _tweens = new List<TweenData>();
+            _tweens.Add(first);
+
+            _currentIndex = 0;
+        }
+
+        public void AddTween(TweenData tween)
+        {
+            TweenData last = _tweens[_tweens.Count - 1];
+            last.Then(tween);
+            last.AddFinishListener(() => _currentIndex++);
+
+            _tweens[_tweens.Count - 1] = last;
+            _tweens.Add(tween);
+        }
+
+        void ResetWorkState()
+        {
+            _working = false;
+            _currentIndex = 0;
+        }
+
+        public void Start()
+        {
+            if (_working)
+                return;
+
+            _working = true;
+
+            TweenData last = _tweens[_tweens.Count - 1];
+            last.AddFinishListener(ResetWorkState);
+            _tweens[_tweens.Count - 1] = last;
+
+            Tween.StartTween(_tweens[0]);
+        }
+
+        public void End()
+        {
+            if (!_working)
+                return;
+
+            Tween.StopTween(_tweens[_currentIndex].ID);
+            ResetWorkState();
         }
     }
 }
