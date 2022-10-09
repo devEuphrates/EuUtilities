@@ -8,14 +8,15 @@ namespace Euphrates
     {
         [SerializeField] UnityEvent OnTrigger;
 
-        public bool Silent { get; set; } = false;
+        [SerializeField] bool _silent = false;
+        public bool Silent { get => _silent; set => _silent = value; }
 
         public void AddListener(UnityAction listener) => OnTrigger.AddListener(listener);
         public void RemoveListener(UnityAction listener) => OnTrigger.RemoveListener(listener);
 
         public void Invoke()
         {
-            if (Silent)
+            if (_silent)
                 return;
 
             OnTrigger?.Invoke();
