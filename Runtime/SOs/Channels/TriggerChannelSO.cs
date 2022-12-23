@@ -13,6 +13,7 @@ namespace Euphrates
 
         public void AddListener(UnityAction listener) => OnTrigger.AddListener(listener);
         public void RemoveListener(UnityAction listener) => OnTrigger.RemoveListener(listener);
+        public void RemoveAllListeners() => OnTrigger.RemoveAllListeners();
 
         public void Invoke()
         {
