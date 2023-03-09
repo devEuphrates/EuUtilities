@@ -1,8 +1,8 @@
 {
   "name": "com.euphrates.utilities",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "displayName": "EuUtilities",
-  "description": "* Singleton base class.\n* Tween library.\n* Game timer.\n* ScriptableObject Architecture components.\n* Object Pooler.\n* UI System",
+  "description": "* Singleton base class.\n* Tween library.\n* Game timer.\n* ScriptableObject Architecture components.\n* Event Listeners.\n* Object Pooler.\n* UI System",
   "unity": "2021.3",
   "unityRelease": "18f1",
   "documentationUrl": "http://www.firatyildirim.com",
