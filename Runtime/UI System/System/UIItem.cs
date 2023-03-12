@@ -49,6 +49,12 @@ public class UIItem : MonoBehaviour
 
     public virtual void Disable()
     {
+        if (_idisableAnims.Count == 0)
+        {
+            OnDisableAnimsComplete?.Invoke();
+            return;
+        }
+
         _completedAnims = 0;
         foreach (var anim in _idisableAnims)
             anim.Play();

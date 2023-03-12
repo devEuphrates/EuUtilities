@@ -32,7 +32,17 @@ public class UIFadeIn : MonoBehaviour, IUIAnim
 
         _canvasGroup.alpha = 0f;
 
-        void Fade() => _canvasGroup.DoAlpha(1f, _duration, Ease.Lerp, null, () => OnFinished?.Invoke());
+        void Fade()
+        {
+            if (_duration == 0f)
+            {
+                _canvasGroup.alpha = 1f;
+                OnFinished?.Invoke();
+                return;
+            }
+
+            _canvasGroup.DoAlpha(1f, _duration, Ease.Lerp, null, () => OnFinished?.Invoke());
+        }
 
         if (_delay != 0f)
         {
