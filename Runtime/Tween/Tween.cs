@@ -176,6 +176,9 @@ namespace Euphrates
 
             void Step(Vector3 val)
             {
+                if (transform == null)
+                    return;
+
                 transform.position = val;
                 onStep?.Invoke(val);
             }
@@ -193,6 +196,9 @@ namespace Euphrates
 
             void Step(Quaternion val)
             {
+                if (transform == null)
+                    return;
+
                 transform.rotation = val;
                 onStep?.Invoke(val);
             }
@@ -210,6 +216,9 @@ namespace Euphrates
 
             void Step(Vector3 val)
             {
+                if (transform == null)
+                    return;
+
                 transform.localScale = val;
                 onStep?.Invoke(val);
             }
@@ -224,6 +233,9 @@ namespace Euphrates
 
             void Step(float val)
             {
+                if (canvasGroup == null)
+                    return;
+
                 canvasGroup.alpha = val;
                 onStep?.Invoke(val);
             }
@@ -238,6 +250,9 @@ namespace Euphrates
 
             void Step(Color val)
             {
+                if (renderer == null)
+                    return;
+
                 renderer.material.color = val;
                 onStep?.Invoke(val);
             }
@@ -252,6 +267,9 @@ namespace Euphrates
 
             void Step(Color val)
             {
+                if (renderer == null)
+                    return;
+
                 renderer.material.SetColor(colorName, val);
                 onStep?.Invoke(val);
             }
