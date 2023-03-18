@@ -1,6 +1,6 @@
 {
   "name": "com.euphrates.utilities",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "displayName": "Utilities",
   "description": "* Singleton base class.\n* Tween library.\n* Game timer.\n* ScriptableObject Architecture components.\n* Event Listeners.\n* Object Pooler.\n* UI System",
   "unity": "2021.3",
