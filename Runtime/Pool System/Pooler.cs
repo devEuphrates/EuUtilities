@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 public class Pooler : Singleton<Pooler>
 {
-    public static readonly int PRE_INSTANTIATE_BATCH = 25;
+    public static readonly int PRE_INSTANTIATE_BATCH = 50;
     public delegate void PreInstantiateEvent(string poolName, int instantiatedAmount);
     public static event PreInstantiateEvent OnPoolPreInstantiateComplete;
 
@@ -61,6 +61,7 @@ public class Pooler : Singleton<Pooler>
         {
             GameObject go = pool.Get();
             spawned[i] = go;
+            go.SetActive(false);
 
             if (i % PRE_INSTANTIATE_BATCH == 0)
                 await Task.Yield();
