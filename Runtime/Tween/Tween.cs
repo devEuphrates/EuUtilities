@@ -159,7 +159,8 @@ namespace Euphrates
                     }
 
                     //onStep.Invoke(tw, new object[] { Time.realtimeSinceStartup });
-                    tw.InvokeStep(Time.realtimeSinceStartup);
+                    if (!tw.InvokeStep(Time.realtimeSinceStartup))
+                        _tweens.RemoveAt(i);
                 }
 
                 await Task.Yield();
@@ -296,7 +297,7 @@ namespace Euphrates
         public float Duration { get; set; }
         public float End => Start + Duration;
 
-        public void InvokeStep(float t);
+        public bool InvokeStep(float t);
         public void InvokeFinish();
 
         public void Stop();
@@ -318,13 +319,23 @@ namespace Euphrates
         public float Duration { get; set; }
         public float End => Start + Duration;
 
-        public void InvokeStep(float t)
+        public bool InvokeStep(float t)
         {
             if (OnStep == null)
-                return;
+                return false;
 
             T val = Operation(this, t);
-            OnStep(val);
+
+            try
+            {
+                OnStep(val);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void InvokeFinish() => OnFinish?.Invoke();
